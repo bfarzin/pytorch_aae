@@ -174,3 +174,6 @@ for step in range(total_step):
 
         for tag, images in info.items():
             logger.image_summary(tag, images, step+1)
+
+#save the Encoder
+Q.save_state_dict('Q_encoder_weights.pt')
