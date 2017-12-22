@@ -72,13 +72,13 @@ class D_net_gauss(nn.Module):
         
 
 EPS = 1e-15
-z_red_dims = 4
+z_red_dims = 120
 Q = Q_net(784,1000,z_red_dims).cuda()
 P = P_net(784,1000,z_red_dims).cuda()
 D_gauss = D_net_gauss(500,z_red_dims).cuda()
 
 # Set the logger
-logger = Logger('./logs/z_4_fixed_LR')
+logger = Logger('./logs/z_120_fixed_LR_2')
 
 # Set learning rates
 gen_lr = 0.0001
@@ -176,4 +176,4 @@ for step in range(total_step):
             logger.image_summary(tag, images, step+1)
 
 #save the Encoder
-Q.save_state_dict('Q_encoder_weights.pt')
+torch.save(Q.state_dict(),'Q_encoder_weights.pt')
