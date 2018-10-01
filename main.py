@@ -3,7 +3,7 @@ import torch.nn as nn
 import torchvision.datasets as dsets
 import torchvision.transforms as transforms
 from torch.autograd import Variable
-from logger import Logger
+#from logger import Logger
 
 import torch.nn.functional as F
 
@@ -58,11 +58,12 @@ class Net(nn.Module):
 
 z_red_dims = 120
 Q = Q_net(784,1000,z_red_dims).cuda()
+Q.load_state_dict(torch.load('Q_encoder_weights.pt'))
 Q.eval() #turn off dropout
 net = Net(input_size = z_red_dims).cuda()
 
-# Set the logger
-logger = Logger('./logs/encoder_fit_120_sm_eval')
+# # Set the logger
+# logger = Logger('./logs/encoder_fit_120_sm_eval')
 
 # Loss and Optimizer
 criterion = nn.CrossEntropyLoss()  
@@ -106,22 +107,22 @@ for step in range(total_step):
             'accuracy': accuracy.data[0]
         }
 
-        for tag, value in info.items():
-            logger.scalar_summary(tag, value, step+1)
+        # for tag, value in info.items():
+        #     logger.scalar_summary(tag, value, step+1)
 
-        # (2) Log values and gradients of the parameters (histogram)
-        for tag, value in net.named_parameters():
-            tag = tag.replace('.', '/')
-            logger.histo_summary(tag, to_np(value), step+1)
-            logger.histo_summary(tag+'/grad', to_np(value.grad), step+1)
+        # # (2) Log values and gradients of the parameters (histogram)
+        # for tag, value in net.named_parameters():
+        #     tag = tag.replace('.', '/')
+        #     logger.histo_summary(tag, to_np(value), step+1)
+        #     logger.histo_summary(tag+'/grad', to_np(value.grad), step+1)
 
-        # (3) Log the images
-        info = {
-            'images': to_np(images.view(-1, 28, 28)[:10])
-        }
+        # # (3) Log the images
+        # info = {
+        #     'images': to_np(images.view(-1, 28, 28)[:10])
+        # }
 
-        for tag, images in info.items():
-            logger.image_summary(tag, images, step+1)
+        # for tag, images in info.items():
+        #     logger.image_summary(tag, images, step+1)
 
 #test
 # MNIST Dataset 
