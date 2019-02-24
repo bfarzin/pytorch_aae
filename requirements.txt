@@ -1,5 +1,5 @@
 tensorflow
 torch
-torchvisiion
+torchvision
 scipy
 numpy
